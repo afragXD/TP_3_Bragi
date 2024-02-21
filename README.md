@@ -2,13 +2,51 @@
 
 Парсер книг(пока только ранобэ) с использованием selenium и хранение их в Cassandra.
 С каких сайтов на данный момент можно парсить:
-* ranobes.com
-* ranobelib.me
-* ranobehub.org
+* [ranobes.com](https://ranobes.com/)
+* [ranobelib.me](https://ranobelib.me/)
+* [ranobehub.org](https://ranobehub.org/)
 
 ## Требования к запуску
 - Apache Cassandra.
-- Скрипты создания таблиц и пространства ключей(keyspace) находится в корне проекта.
+- Скрипты создания таблиц и пространства ключей(keyspace).
+  ```CQL
+  CREATE KEYSPACE bragi
+  WITH REPLICATION = { 
+   'class' : 'SimpleStrategy', 
+   'replication_factor' : 1 
+  };
+  ```
+
+  ```CQL
+  use bragi;
+  CREATE TABLE IF NOT EXISTS books (
+            book_id UUID PRIMARY KEY,
+            name TEXT,
+            en_name TEXT,
+            image TEXT,
+            description TEXT,
+            rating FLOAT,
+            status TEXT,
+            chapters SMALLINT,
+            year SMALLINT,
+            author TEXT,
+            rating_count INT,
+            country TEXT, 
+            genres SET<TEXT>
+        );
+  ```
+
+  ```CQL
+  use bragi;
+  create table IF NOT EXISTS chapters(
+            chapter_number int,
+            chapter_name text,
+            book_id UUID,
+            chapter_text text,
+            PRIMARY KEY ((book_id), chapter_number)
+        )
+        WITH CLUSTERING ORDER BY (chapter_number ASC);
+  ```
 
 ## Общая структура
 ### Структура директорий
