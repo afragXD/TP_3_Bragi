@@ -8,7 +8,7 @@ import java.time.Duration
 
 val chapterNameXPathList = listOf(
     "//*[@id=\"dle-content\"]/article/div[2]/h1",
-    "/html/body/div[1]/div[3]/div/a/div[3]",
+    "/html/body/div[1]/div[3]/div/div[2]/div/div[2]",
 )
 
 fun getChapterName(
